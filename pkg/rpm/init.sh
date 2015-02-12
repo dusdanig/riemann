@@ -20,7 +20,7 @@ RIEMANN_USER=riemann
 
 DAEMON=/usr/bin/riemann
 NAME=riemann
-PID_FILE=${PIDFILE:-/var/run/${NAME}.pid}
+PID_FILE=${PIDFILE:-/var/run/${NAME}/${NAME}.pid}
 LOCK_FILE=${LOCKFILE:-/var/lock/subsys/${NAME}}
 NFILES=${NFILES:-32768}
 
@@ -32,8 +32,9 @@ DAEMON_OPTS="${RIEMANN_OPTS} ${RIEMANN_CONFIG}"
 start() {
     echo -n $"Starting ${NAME}: "
     ulimit -n $NFILES
-#    daemon --pidfile $PID_FILE --user $RIEMANN_USER $DAEMON $DAEMON_OPTS
-    daemonize -u $RIEMANN_USER -p $PID_FILE -l $LOCK_FILE $DAEMON $DAEMON_OPTS
+    daemon --pidfile $PID_FILE --user $RIEMANN_USER $DAEMON $DAEMON_OPTS
+#    echo daemonize -u $RIEMANN_USER -p $PID_FILE -l $LOCK_FILE $DAEMON $DAEMON_OPTS
+#    daemonize -u $RIEMANN_USER -p $PID_FILE -l $LOCK_FILE $DAEMON $DAEMON_OPTS
     RETVAL=$?
     echo
     [ $RETVAL -eq 0 ] && touch $LOCK_FILE

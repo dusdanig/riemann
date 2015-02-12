@@ -1,12 +1,12 @@
 #!/bin/bash
 
-if [ -f /etc/sysconfig/riemann ]; then
-    . /etc/sysconfig/riemann
+if [ -f /etc/default/riemann ]; then
+    . /etc/default/riemann
 fi
 
 JAR="$EXTRA_CLASSPATH:/usr/lib/riemann/riemann.jar"
 CONFIG="/etc/riemann/riemann.config"
-AGGRESSIVE_OPTS="-XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+CMSParallelRemarkEnabled -XX:+AggressiveOpts -XX:+UseFastAccessorMethods -XX:+UseCompressedOops -XX:+CMSClassUnloadingEnabled"
+AGGRESSIVE_OPTS="-XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+CMSParallelRemarkEnabled -XX:+AggressiveOpts -XX:+UseFastAccessorMethods -XX:+UseCompressedOops"
 
 usage()
 {
@@ -42,4 +42,8 @@ for arg in "$@"; do
   esac
 done
 
-exec java $EXTRA_JAVA_OPTS $OPTS -cp "$JAR" riemann.bin "$CONFIG"
+/appl/java/bin/java $EXTRA_JAVA_OPTS $OPTS -cp "$JAR" riemann.bin "$CONFIG" &
+RIEMANN_PID=$!
+
+echo $RIEMANN_PID >/var/run/riemann/riemann.pid
+
