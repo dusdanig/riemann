@@ -117,6 +117,11 @@
          :filemode "755"
          :directory-included? true}
         
+        ; Pid dir
+        {:directory "/var/run/riemann"
+         :filemode "755"
+         :directory-included? true}
+
         ; Config dir
         {:directory "/etc/riemann"
          :filemode "755"
